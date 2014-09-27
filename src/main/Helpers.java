@@ -10,12 +10,12 @@ public class Helpers {
 	 * @param threadID
 	 * @return
 	 */
-	public static List<List<Object>> split(List<Object> list, int nbSlices) {
+	public static <E> List<List<E>> split(List<E> list, int nbSlices) {
 
 		if (nbSlices <= 0)
 			return null;
 
-		List<List<Object>> splittedArray = new ArrayList<List<Object>>();
+		List<List<E>> splittedArray = new ArrayList<List<E>>();
 
 		int total = list.size();
 		int perSlice = total / nbSlices;
@@ -36,7 +36,7 @@ public class Helpers {
 
 			toIndex = remainder + (i + 1) * perSlice;
 			
-			List<Object> subList = list.subList(fromIndex, toIndex);
+			List<E> subList = list.subList(fromIndex, toIndex);
 
 			splittedArray.add(subList);
 		}
