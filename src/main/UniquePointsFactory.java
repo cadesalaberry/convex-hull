@@ -1,4 +1,5 @@
 package main;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -77,7 +78,8 @@ public class UniquePointsFactory implements Runnable {
 
 			// Loop until a unique point has been added
 			while (!this.addPoint(Point.random()))
-				;//System.out.println("Duplicate@" + count + " in " + Thread.currentThread());
+				;// System.out.println("Duplicate@" + count + " in " +
+					// Thread.currentThread());
 		}
 
 		synchronized (lock) {
