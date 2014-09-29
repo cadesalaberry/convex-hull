@@ -4,7 +4,7 @@ import java.awt.Point;
 
 public class MyPoint extends Point implements Comparable<MyPoint> {
 
-	int x, y;
+	private static final long serialVersionUID = 1842874633097775802L;
 
 	public MyPoint(int x, int y) {
 		super(x, y);

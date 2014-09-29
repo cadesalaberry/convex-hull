@@ -12,6 +12,8 @@ import java.util.concurrent.TimeUnit;
 public class MTArrayList<T extends Comparable<T>> extends ArrayList<T>
 		implements Runnable {
 
+	private static final long serialVersionUID = -2315498187469528631L;
+
 	// A static variable cannot be generic. ugly hack assuming comparables.
 	private static volatile List<Comparable> pool = new ArrayList<>();
 
@@ -91,7 +93,7 @@ public class MTArrayList<T extends Comparable<T>> extends ArrayList<T>
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		Collections.sort(this);
 
 		return this;
