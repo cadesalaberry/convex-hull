@@ -43,11 +43,6 @@ public class MyPoint extends Point implements Comparable<MyPoint> {
 	}
 
 	@Override
-	public int hashCode() {
-		return x ^ y;
-	}
-
-	@Override
 	public String toString() {
 		return "(" + x + "," + y + ")";
 	}
