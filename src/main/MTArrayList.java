@@ -1,13 +1,17 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class MTArrayList<T extends Comparable<T>> extends ArrayList<T>
 		implements Runnable {
-	
+
 	// A static variable cannot be generic. ugly hack assuming comparables.
 	private static volatile List<Comparable> pool = new ArrayList<>();
 
@@ -37,7 +41,7 @@ public class MTArrayList<T extends Comparable<T>> extends ArrayList<T>
 		if (numOfThreads <= 1) {
 			return Collections.min(this);
 		}
-		
+
 		pool.clear();
 
 		final List<List<T>> splittedList = Helpers.split(this, numOfThreads);
@@ -62,10 +66,35 @@ public class MTArrayList<T extends Comparable<T>> extends ArrayList<T>
 			}
 		}
 
-		System.out.println(pool);
-		
 		// Again, ugly cast from the Comparable interface.
 		return (T) Collections.min(pool);
+	}
+
+	synchronized public MTArrayList<T> sort() {
+		ExecutorService es = Executors.newFixedThreadPool(numOfThreads);
+
+		final List<List<T>> splittedList = Helpers.split(this, numOfThreads);
+
+		for (final List<T> list : splittedList) {
+			es.submit(new Runnable() {
+				@Override
+				public void run() {
+					Collections.sort(list);
+				}
+			});
+		}
+		es.shutdown();
+
+		try {
+			es.awaitTermination(10, TimeUnit.MINUTES);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Collections.sort(this);
+
+		return this;
 	}
 
 	public int getNumThreads() {

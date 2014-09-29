@@ -28,7 +28,7 @@ public class Graham {
 			
 				long t0 = System.currentTimeMillis();
 				
-				new UniquePointsFactory(i, n).randomize();
+				new UniquePointsFactory(i).randomize(n);
 				
 				Timer.printTiming(i, n, t0, System.currentTimeMillis());
 				

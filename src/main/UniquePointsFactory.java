@@ -4,18 +4,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 public class UniquePointsFactory implements Runnable {
 
+	private static Random rand = new Random(42);
+	
 	private int numOfThreads, numOfPoints;
 
-	private Set<Point> points = new HashSet<Point>();
+	private Set<MyPoint> points = new HashSet<MyPoint>();
 
 	public static Object lock = new Object();
 
-	public UniquePointsFactory(int numOfThreads, int numOfPoints) {
-		this.numOfPoints = numOfPoints;
+	public UniquePointsFactory(int numOfThreads) {
 		this.numOfThreads = numOfThreads;
 	}
 
@@ -24,9 +26,11 @@ public class UniquePointsFactory implements Runnable {
 	 * 
 	 * @return
 	 */
-	public List<Point> randomize() {
+	public List<MyPoint> randomize(int numOfPoints) {
 
-		points.clear();
+		this.numOfPoints = numOfPoints;
+		
+		points = new HashSet<MyPoint>();
 
 		// Spawns the given number of threads.
 		for (int i = 0; i < numOfThreads; i++) {
@@ -55,15 +59,15 @@ public class UniquePointsFactory implements Runnable {
 	 * @param point
 	 * @return
 	 */
-	public boolean addPoint(Point point) {
+	private boolean addPoint(MyPoint point) {
 		synchronized (points) {
 			return points.add(point);
 		}
 	}
 
-	public List<Point> getAsList() {
+	private List<MyPoint> getAsList() {
 		synchronized (points) {
-			return new ArrayList<Point>((Collection<? extends Point>) points);
+			return new ArrayList<MyPoint>((Collection<? extends MyPoint>) points);
 		}
 	}
 
@@ -72,14 +76,13 @@ public class UniquePointsFactory implements Runnable {
 
 		// System.out.println("" + Thread.currentThread() + " starting...");
 
-		int count = 0;
+		int count;
 
 		for (count = 0; points.size() < numOfPoints; count++) {
-
+			
 			// Loop until a unique point has been added
-			while (!this.addPoint(Point.random()))
-				;// System.out.println("Duplicate@" + count + " in " +
-					// Thread.currentThread());
+			while (!this.addPoint(randomPoint()))
+				;
 		}
 
 		synchronized (lock) {
@@ -88,5 +91,13 @@ public class UniquePointsFactory implements Runnable {
 
 		// System.out.print("Thread " + Thread.currentThread());
 		// System.out.println(" added " + count + " points.");
+	}
+	
+	public static MyPoint randomPoint() {
+
+		int x = rand.nextInt();
+		int y = rand.nextInt();
+
+		return new MyPoint(x, y);
 	}
 }
