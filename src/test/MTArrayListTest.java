@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import main.MTArrayList;
 import main.MyPoint;
+import main.tools.AngleComparator;
 
 import org.junit.Test;
 
@@ -48,13 +49,12 @@ public class MTArrayListTest {
 		list.setNumThreads(1);
 
 		list.add(new MyPoint(1, 1));
-		list.sort();
+		list.add(new MyPoint(1, -1));
+		list.sort(new AngleComparator());
 
-		for (int i = 0; i < 1000; i++) {
-			assertEquals(new MyPoint(1,1), list.get(i));
-		}
+		assertEquals(new MyPoint(1, -1), list.get(0));
 	}
-	
+
 	@Test
 	public void testSortBig() {
 

@@ -1,13 +1,16 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
+import main.tools.Helpers;
+import main.tools.NaturalComparator;
 
 public class MTArrayList<T extends Comparable<T>> extends ArrayList<T>
 		implements Runnable {
@@ -73,6 +76,18 @@ public class MTArrayList<T extends Comparable<T>> extends ArrayList<T>
 	}
 
 	synchronized public MTArrayList<T> sort() {
+		return this.sort(new NaturalComparator<T>());
+	}
+
+	/**
+	 * The sorting algorithm is a modified mergesort (in which the merge is
+	 * omitted if the highest element in the low sublist is less than the lowest
+	 * element in the high sublist). This algorithm offers guaranteed n log(n)
+	 * performance.
+	 * 
+	 * @return
+	 */
+	synchronized public MTArrayList<T> sort(final Comparator<? super T> comp) {
 		ExecutorService es = Executors.newFixedThreadPool(numOfThreads);
 
 		final List<List<T>> splittedList = Helpers.split(this, numOfThreads);
@@ -81,7 +96,7 @@ public class MTArrayList<T extends Comparable<T>> extends ArrayList<T>
 			es.submit(new Runnable() {
 				@Override
 				public void run() {
-					Collections.sort(list);
+					Collections.sort(list, comp);
 				}
 			});
 		}
@@ -94,7 +109,7 @@ public class MTArrayList<T extends Comparable<T>> extends ArrayList<T>
 			e.printStackTrace();
 		}
 
-		Collections.sort(this);
+		Collections.sort(this, comp);
 
 		return this;
 	}

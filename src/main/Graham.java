@@ -1,4 +1,7 @@
 package main;
+
+import main.tools.Timer;
+
 public class Graham {
 
 	/**

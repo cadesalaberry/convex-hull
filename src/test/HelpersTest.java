@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.Helpers;
+import main.tools.Helpers;
 
 import org.junit.Test;
 

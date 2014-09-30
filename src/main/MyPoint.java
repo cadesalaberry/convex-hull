@@ -11,8 +11,8 @@ public class MyPoint extends Point implements Comparable<MyPoint> {
 	}
 
 	/**
-	 * Compares this point to that point by y-coordinate, breaking ties by
-	 * x-coordinate.
+	 * Compares this {@link Point} to that {@link Point} by y-coordinate,
+	 * breaking ties by x-coordinate.
 	 * 
 	 * @param that
 	 *            the other point
@@ -46,4 +46,15 @@ public class MyPoint extends Point implements Comparable<MyPoint> {
 	public String toString() {
 		return "(" + x + "," + y + ")";
 	}
+
+	/**
+	 * Three points are a counter-clockwise turn if ccw > 0, clockwise if ccw <
+	 * 0, and collinear if ccw = 0 because ccw is a determinant that gives twice
+	 * the signed area of the triangle formed by p1, p2 and p3. Taken from
+	 * wikipedia.
+	 */
+	public static int ccw(MyPoint p1, MyPoint p2, MyPoint p3) {
+		return (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x);
+	}
+
 }
