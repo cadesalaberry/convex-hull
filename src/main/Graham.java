@@ -33,6 +33,7 @@ public class Graham {
 		if (!validateArgs(q, n, p)) {
 			return;
 		}
+		solveQuestion(q, n, p);
 	}
 
 	public static void solveQuestion(int q, int n, int p) {
